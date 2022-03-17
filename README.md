@@ -1,4 +1,4 @@
-# `HoffLab MGX`
+# HoffLab MGX
 
 **(Lucas Hoffman Lab Metagenomics Pipeline)**
 
