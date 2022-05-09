@@ -6,7 +6,7 @@ import os
 
 # Load sample information and validate
 configfile: "config/config.yaml"
-samples_df = pd.read_csv(config["sample_info"]["sample_list_path"], sep="\t")
+samples_df = pd.read_csv("config/samples.tsv", sep="\t")
 
 # get current working directory so absolute paths can be used for input/output files
 results = os.getcwd()
