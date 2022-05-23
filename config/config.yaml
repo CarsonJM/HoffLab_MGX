@@ -12,7 +12,7 @@ sample_info:
 # Resources path
 #------------------------------------
 # path to resources folder (so large databases can be re-used)
-resources_path: "/labdata3/hoffdata/Shared/resources"
+resources_path: "/home/carsonjm/resources"
 
 
 #------------------------------------

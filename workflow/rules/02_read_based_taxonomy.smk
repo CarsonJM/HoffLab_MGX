@@ -29,16 +29,16 @@ samples_assemblies=list(set(samples_df["sample"].astype("string") + "_" + sample
 # download metaphlan database
 rule metaphlan_database:
     output:
-        resources + "/metaphlan/mpa_latest",
+        metphlan_db=resources + "/metaphlan/mpa_v30_CHOCOPhlAn_201901/mpa_v30_CHOCOPhlAn_201901.1.bt2",
     params:
-        metaphlan_db=resources + "/metaphlan/mpa_vJan21_CHOCOPhlAnSGB_202103/",
+        metaphlan_db=resources + "/metaphlan/mpa_v30_CHOCOPhlAn_201901/",
     conda: 
         "../envs/metaphlan.yml"
     shell:
         """
         # install metaphlan database
         metaphlan --install \
-        --index mpa_vJan21_CHOCOPhlAnSGB_202103 \
+        --index mpa_v30_CHOCOPhlAn_201901 \
         --bowtie2db {params.metaphlan_db}
         """
 
@@ -46,7 +46,7 @@ rule metaphlan_database:
 # taxonomically annotate reads with metaphlan
 rule metaphlan:
     input:
-        metphlan_db=resources + "/metaphlan/mpa_latest",
+        metphlan_db=resources + "/metaphlan/mpa_v30_CHOCOPhlAn_201901/mpa_v30_CHOCOPhlAn_201901.1.bt2",
         R1=results + "/01_READ_PREPROCESSING/03_kneaddata/{sample_assembly}_paired_1.fastq.gz",
         R2=results + "/01_READ_PREPROCESSING/03_kneaddata/{sample_assembly}_paired_2.fastq.gz",
         R1S=results + "/01_READ_PREPROCESSING/03_kneaddata/{sample_assembly}_unmatched_1.fastq.gz",
@@ -56,7 +56,7 @@ rule metaphlan:
         bowtie2=results+"/02_READ_BASED_TAXONOMY/01_metaphlan/{sample_assembly}_bowtie2.bz2",
     params:
         merged_fastq=results+"/02_READ_BASED_TAXONOMY/01_metaphlan/{sample_assembly}_merged.fastq",
-        metaphlan_db=resources + "/metaphlan/mpa_vJan21_CHOCOPhlAnSGB_202103/",
+        metaphlan_db=resources + "/metaphlan/mpa_v30_CHOCOPhlAn_201901/",
         extra_args=config['metaphlan']['extra_args'],
     threads:
         10
@@ -105,7 +105,7 @@ rule metaphlan_level_reduction:
         genus=results+"/02_READ_BASED_TAXONOMY/metaphlan_combined_profiles_genus.csv",
         family=results+"/02_READ_BASED_TAXONOMY/metaphlan_combined_profiles_family.csv",
         order=results+"/02_READ_BASED_TAXONOMY/metaphlan_combined_profiles_order.csv",
-        class=results+"/02_READ_BASED_TAXONOMY/metaphlan_combined_profiles_class.csv,
+        class_df=results+"/02_READ_BASED_TAXONOMY/metaphlan_combined_profiles_class.csv",
         phylum=results+"/02_READ_BASED_TAXONOMY/metaphlan_combined_profiles_phylum.csv",
         kingdom=results+"/02_READ_BASED_TAXONOMY/metaphlan_combined_profiles_kingdom.csv",
     conda:
@@ -117,7 +117,7 @@ rule metaphlan_level_reduction:
 # visualize metaphlan results
 rule metaphlan_analysis:
     input:
-        results+"/02_READ_BASED_TAXONOMY/metaphlan_combined_profiles.txt"
+        results + "/02_READ_BASED_TAXONOMY/metaphlan_combined_profiles_phylum.csv",
     output:
         figure=report(
             results + "/02_READ_BASED_TAXONOMY/metaphlan_phyla_barplots.png",
