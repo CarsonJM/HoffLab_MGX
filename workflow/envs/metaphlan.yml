@@ -1,0 +1,6 @@
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  - metaphlan=3.0.13=pyhb7b1952_0

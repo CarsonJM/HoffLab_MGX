@@ -1,0 +1,1 @@
+This workflow preprocesses and analyzes metagenomic sequences using standard Hoffman lab protocols.
